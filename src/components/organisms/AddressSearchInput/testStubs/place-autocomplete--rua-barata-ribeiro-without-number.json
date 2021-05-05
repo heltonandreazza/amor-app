@@ -1,0 +1,245 @@
+{
+  "predictions":[
+     {
+        "description":"Rua Barata Ribeiro - Laranjeiras, Rio de Janeiro - RJ, Brasil",
+        "id":"e82daa68158f7d21a801bd20e08e7dc6a0672590",
+        "matched_substrings":[
+           {
+              "length":18,
+              "offset":0
+           }
+        ],
+        "place_id":"Ej1SdWEgQmFyYXRhIFJpYmVpcm8gLSBMYXJhbmplaXJhcywgUmlvIGRlIEphbmVpcm8gLSBSSiwgQnJhc2lsIi4qLAoUChIJiTMcdVDVmwARoREhRK6BvzUSFAoSCWGtMviTf5kAEeOkLs-usKIs",
+        "reference":"Ej1SdWEgQmFyYXRhIFJpYmVpcm8gLSBMYXJhbmplaXJhcywgUmlvIGRlIEphbmVpcm8gLSBSSiwgQnJhc2lsIi4qLAoUChIJiTMcdVDVmwARoREhRK6BvzUSFAoSCWGtMviTf5kAEeOkLs-usKIs",
+        "structured_formatting":{
+           "main_text":"Rua Barata Ribeiro",
+           "main_text_matched_substrings":[
+              {
+                 "length":18,
+                 "offset":0
+              }
+           ],
+           "secondary_text":"Laranjeiras, Rio de Janeiro - RJ, Brasil"
+        },
+        "terms":[
+           {
+              "offset":0,
+              "value":"Rua Barata Ribeiro"
+           },
+           {
+              "offset":21,
+              "value":"Laranjeiras"
+           },
+           {
+              "offset":34,
+              "value":"Rio de Janeiro"
+           },
+           {
+              "offset":51,
+              "value":"RJ"
+           },
+           {
+              "offset":55,
+              "value":"Brasil"
+           }
+        ],
+        "types":[
+           "route",
+           "geocode"
+        ]
+     },
+     {
+        "description":"Rua Barata Ribeiro - Bela Vista, São Paulo - SP, Brasil",
+        "id":"3b83a75ea66d3f3a123a295c5247f9793c3e6537",
+        "matched_substrings":[
+           {
+              "length":18,
+              "offset":0
+           }
+        ],
+        "place_id":"EjhSdWEgQmFyYXRhIFJpYmVpcm8gLSBCZWxhIFZpc3RhLCBTw6NvIFBhdWxvIC0gU1AsIEJyYXNpbCIuKiwKFAoSCRv1mfrKWc6UEQ1NPvQG2fDpEhQKEglhPUZWt1nOlBFkCfT35tHzCQ",
+        "reference":"EjhSdWEgQmFyYXRhIFJpYmVpcm8gLSBCZWxhIFZpc3RhLCBTw6NvIFBhdWxvIC0gU1AsIEJyYXNpbCIuKiwKFAoSCRv1mfrKWc6UEQ1NPvQG2fDpEhQKEglhPUZWt1nOlBFkCfT35tHzCQ",
+        "structured_formatting":{
+           "main_text":"Rua Barata Ribeiro",
+           "main_text_matched_substrings":[
+              {
+                 "length":18,
+                 "offset":0
+              }
+           ],
+           "secondary_text":"Bela Vista, São Paulo - SP, Brasil"
+        },
+        "terms":[
+           {
+              "offset":0,
+              "value":"Rua Barata Ribeiro"
+           },
+           {
+              "offset":21,
+              "value":"Bela Vista"
+           },
+           {
+              "offset":33,
+              "value":"São Paulo"
+           },
+           {
+              "offset":45,
+              "value":"SP"
+           },
+           {
+              "offset":49,
+              "value":"Brasil"
+           }
+        ],
+        "types":[
+           "route",
+           "geocode"
+        ]
+     },
+     {
+        "description":"Rua Barata Ribeiro - Vila Itapura, Campinas - SP, Brasil",
+        "id":"5ab6dbc5d000724873cbfbd0981b38ed7b3da92a",
+        "matched_substrings":[
+           {
+              "length":18,
+              "offset":0
+           }
+        ],
+        "place_id":"EjhSdWEgQmFyYXRhIFJpYmVpcm8gLSBWaWxhIEl0YXB1cmEsIENhbXBpbmFzIC0gU1AsIEJyYXNpbCIuKiwKFAoSCYHjC-SryMiUEUBRS_H8wtQmEhQKEgmFZMU6rcjIlBHyK-6q61e-ZQ",
+        "reference":"EjhSdWEgQmFyYXRhIFJpYmVpcm8gLSBWaWxhIEl0YXB1cmEsIENhbXBpbmFzIC0gU1AsIEJyYXNpbCIuKiwKFAoSCYHjC-SryMiUEUBRS_H8wtQmEhQKEgmFZMU6rcjIlBHyK-6q61e-ZQ",
+        "structured_formatting":{
+           "main_text":"Rua Barata Ribeiro",
+           "main_text_matched_substrings":[
+              {
+                 "length":18,
+                 "offset":0
+              }
+           ],
+           "secondary_text":"Vila Itapura, Campinas - SP, Brasil"
+        },
+        "terms":[
+           {
+              "offset":0,
+              "value":"Rua Barata Ribeiro"
+           },
+           {
+              "offset":21,
+              "value":"Vila Itapura"
+           },
+           {
+              "offset":35,
+              "value":"Campinas"
+           },
+           {
+              "offset":46,
+              "value":"SP"
+           },
+           {
+              "offset":50,
+              "value":"Brasil"
+           }
+        ],
+        "types":[
+           "route",
+           "geocode"
+        ]
+     },
+     {
+        "description":"Rua Barata Ribeiro - Jardim Olavo Bilac, Duque de Caxias - RJ, Brasil",
+        "id":"1c1b4e238a4cb7e79c4928778982ef270b702337",
+        "matched_substrings":[
+           {
+              "length":18,
+              "offset":0
+           }
+        ],
+        "place_id":"EkVSdWEgQmFyYXRhIFJpYmVpcm8gLSBKYXJkaW0gT2xhdm8gQmlsYWMsIER1cXVlIGRlIENheGlhcyAtIFJKLCBCcmFzaWwiLiosChQKEglVCD2RrHqZABEZnedjvS-_7hIUChIJGeuOJK96mQARHVZF0J2Vuek",
+        "reference":"EkVSdWEgQmFyYXRhIFJpYmVpcm8gLSBKYXJkaW0gT2xhdm8gQmlsYWMsIER1cXVlIGRlIENheGlhcyAtIFJKLCBCcmFzaWwiLiosChQKEglVCD2RrHqZABEZnedjvS-_7hIUChIJGeuOJK96mQARHVZF0J2Vuek",
+        "structured_formatting":{
+           "main_text":"Rua Barata Ribeiro",
+           "main_text_matched_substrings":[
+              {
+                 "length":18,
+                 "offset":0
+              }
+           ],
+           "secondary_text":"Jardim Olavo Bilac, Duque de Caxias - RJ, Brasil"
+        },
+        "terms":[
+           {
+              "offset":0,
+              "value":"Rua Barata Ribeiro"
+           },
+           {
+              "offset":21,
+              "value":"Jardim Olavo Bilac"
+           },
+           {
+              "offset":41,
+              "value":"Duque de Caxias"
+           },
+           {
+              "offset":59,
+              "value":"RJ"
+           },
+           {
+              "offset":63,
+              "value":"Brasil"
+           }
+        ],
+        "types":[
+           "route",
+           "geocode"
+        ]
+     },
+     {
+        "description":"Rua Barata Ribeiro - Jardim Buriti Sereno, Aparecida de Goiânia - GO, Brasil",
+        "id":"8c5e662f50e289ba7fdc82520f41f20a888a4d92",
+        "matched_substrings":[
+           {
+              "length":18,
+              "offset":0
+           }
+        ],
+        "place_id":"Ek1SdWEgQmFyYXRhIFJpYmVpcm8gLSBKYXJkaW0gQnVyaXRpIFNlcmVubywgQXBhcmVjaWRhIGRlIEdvacOibmlhIC0gR08sIEJyYXNpbCIuKiwKFAoSCRknfCOz-V6TEffrLHdP57ikEhQKEgnPI18NMPhekxGnn9Odd06c2A",
+        "reference":"Ek1SdWEgQmFyYXRhIFJpYmVpcm8gLSBKYXJkaW0gQnVyaXRpIFNlcmVubywgQXBhcmVjaWRhIGRlIEdvacOibmlhIC0gR08sIEJyYXNpbCIuKiwKFAoSCRknfCOz-V6TEffrLHdP57ikEhQKEgnPI18NMPhekxGnn9Odd06c2A",
+        "structured_formatting":{
+           "main_text":"Rua Barata Ribeiro",
+           "main_text_matched_substrings":[
+              {
+                 "length":18,
+                 "offset":0
+              }
+           ],
+           "secondary_text":"Jardim Buriti Sereno, Aparecida de Goiânia - GO, Brasil"
+        },
+        "terms":[
+           {
+              "offset":0,
+              "value":"Rua Barata Ribeiro"
+           },
+           {
+              "offset":21,
+              "value":"Jardim Buriti Sereno"
+           },
+           {
+              "offset":43,
+              "value":"Aparecida de Goiânia"
+           },
+           {
+              "offset":66,
+              "value":"GO"
+           },
+           {
+              "offset":70,
+              "value":"Brasil"
+           }
+        ],
+        "types":[
+           "route",
+           "geocode"
+        ]
+     }
+  ],
+  "status":"OK"
+}
