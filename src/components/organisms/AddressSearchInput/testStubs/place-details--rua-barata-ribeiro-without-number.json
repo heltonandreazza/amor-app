@@ -1,0 +1,80 @@
+{
+  "html_attributions":[
+
+  ],
+  "result":{
+     "address_components":[
+        {
+           "long_name":"Rua Barata Ribeiro",
+           "short_name":"R. Barata Ribeiro",
+           "types":[
+              "route"
+           ]
+        },
+        {
+           "long_name":"Bela Vista",
+           "short_name":"Bela Vista",
+           "types":[
+              "sublocality_level_1",
+              "sublocality",
+              "political"
+           ]
+        },
+        {
+           "long_name":"São Paulo",
+           "short_name":"São Paulo",
+           "types":[
+              "administrative_area_level_2",
+              "political"
+           ]
+        },
+        {
+           "long_name":"São Paulo",
+           "short_name":"SP",
+           "types":[
+              "administrative_area_level_1",
+              "political"
+           ]
+        },
+        {
+           "long_name":"Brazil",
+           "short_name":"BR",
+           "types":[
+              "country",
+              "political"
+           ]
+        }
+     ],
+     "adr_address":"<span class=\"street-address\">R. Barata Ribeiro</span> - <span class=\"extended-address\">Bela Vista</span>, <span class=\"locality\">São Paulo</span> - <span class=\"region\">SP</span>, <span class=\"country-name\">Brazil</span>",
+     "formatted_address":"R. Barata Ribeiro - Bela Vista, São Paulo - SP, Brazil",
+     "geometry":{
+        "location":{
+           "lat":-23.5559614,
+           "lng":-46.65127689999999
+        },
+        "viewport":{
+           "northeast":{
+              "lat":-23.5546124197085,
+              "lng":-46.6499279197085
+           },
+           "southwest":{
+              "lat":-23.5573103802915,
+              "lng":-46.6526258802915
+           }
+        }
+     },
+     "icon":"https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+     "id":"3b83a75ea66d3f3a123a295c5247f9793c3e6537",
+     "name":"Rua Barata Ribeiro",
+     "place_id":"EjdSLiBCYXJhdGEgUmliZWlybyAtIEJlbGEgVmlzdGEsIFPDo28gUGF1bG8gLSBTUCwgQnJhemlsIi4qLAoUChIJG_WZ-spZzpQRDU0-9AbZ8OkSFAoSCWE9Rla3Wc6UEWQJ9Pfm0fMJ",
+     "reference":"EjdSLiBCYXJhdGEgUmliZWlybyAtIEJlbGEgVmlzdGEsIFPDo28gUGF1bG8gLSBTUCwgQnJhemlsIi4qLAoUChIJG_WZ-spZzpQRDU0-9AbZ8OkSFAoSCWE9Rla3Wc6UEWQJ9Pfm0fMJ",
+     "scope":"GOOGLE",
+     "types":[
+        "route"
+     ],
+     "url":"https://maps.google.com/?q=R.+Barata+Ribeiro+-+Bela+Vista,+S%C3%A3o+Paulo+-+SP,+Brazil&ftid=0x94ce59cafa99f51b:0xe9f0d906f43e4d0d",
+     "utc_offset":-180,
+     "vicinity":"Bela Vista"
+  },
+  "status":"OK"
+}

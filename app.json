@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "AMOR App",
+    "slug": "amor-app",
+    "privacy": "public",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#D1D1D1"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.amorco.amorapp"
+    },
+    "android": {
+      "package": "com.amorco.amorapp",
+      "permissions": ["WAKE_LOCK", "LOCATION"],
+      "versionCode": 100000
+    }
+  }
+}
