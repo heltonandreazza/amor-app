@@ -126,7 +126,7 @@ const ProfileOng = ({ navigation }) => {
         {mode === MODE.VIEW ?
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Button title="Doar pessoalmente" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => openLink(encodeURI(`https://maps.google.com/maps?daddr=${getMapsAddress(profile?.address)}`))}/>
-            <Button title="Doar online" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Home })}/>
+            <Button title="Doar online" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Payment })}/>
           </View>
         : null}
         {/* {mode === MODE.VIEW && isMyProfile ?

@@ -4,6 +4,8 @@ export const APP_ROUTES = Object.freeze({
   Profile: 'Profile',
   ProfilePerson: 'ProfilePerson',
   ProfileOng: 'ProfileOng',
+  Payment: 'Payment',
+  PaymentSucceed: 'PaymentSucceed',
   Welcome: 'Welcome',
   Auth: 'Auth',
   Main: 'Main',

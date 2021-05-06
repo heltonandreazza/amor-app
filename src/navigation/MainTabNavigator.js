@@ -9,6 +9,8 @@ import Home from 'screens/Home/Home';
 import Profile from 'screens/Profile/Profile';
 import ProfilePerson from 'screens/ProfilePerson/ProfilePerson';
 import ProfileOng from 'screens/ProfileOng/ProfileOng';
+import Payment from 'screens/Payment/Payment';
+import PaymentSucceed from 'screens/PaymentSucceed/PaymentSucceed';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -20,6 +22,8 @@ const HomeStack = createStackNavigator(
     Home: Home,
     ProfilePerson: ProfilePerson,
     ProfileOng: ProfileOng,
+    Payment: Payment,
+    PaymentSucceed: PaymentSucceed,
   },
   config
 );

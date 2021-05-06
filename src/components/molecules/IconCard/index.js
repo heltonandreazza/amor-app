@@ -19,6 +19,7 @@ const IconCard = ({
   rightIconName,
   showRightIconNameSpacer,
   iconColor,
+  rightIconColor,
   textColor,
   height,
   elevation,
@@ -91,7 +92,7 @@ const IconCard = ({
             <Icon
               icon={rightIconName}
               size={ICON_SIZE}
-              color={COLORS.DARK_GRAY}
+              color={rightIconColor}
             />
           </View>
         ) : (
@@ -106,6 +107,7 @@ IconCard.propTypes = {
   onPress: PropTypes.func,
   iconName: PropTypes.string.isRequired,
   rightIconName: PropTypes.string,
+  rightIconColor: PropTypes.string,
   showRightIconNameSpacer: PropTypes.string,
   imageSource: PropTypes.shape(),
   iconColor: PropTypes.string,
@@ -123,6 +125,7 @@ IconCard.propTypes = {
 IconCard.defaultProps = {
   children: null,
   iconColor: COLORS.DARK_GRAY,
+  rightIconColor: COLORS.DARK_GRAY,
   textColor: COLORS.DARK_GRAY,
   textStyle: null,
   descriptionStyle: null,
