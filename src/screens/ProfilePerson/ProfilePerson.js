@@ -20,7 +20,7 @@ const DATA = [{ id: 1, value: 'item data value 1' }, { id: 2, value: 'zuera né'
 const ProfilePerson = ({ navigation }) => {
   const [mode, setMode] = useState(MODE.VIEW)
   const [selectedAddress, setSelectedAddress] = useState({})
-  const user = navigation.getParam('user')
+  const user = navigation.getParam('profile')
 
   const adressDesc = user?.address?.address ? `${user?.address?.address} - ${user?.address?.neighbordhood}, ${user?.address?.province}` : ''
 

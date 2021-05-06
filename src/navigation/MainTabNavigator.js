@@ -8,6 +8,7 @@ import TabBarIcon from 'components/TabBarIcon';
 import Home from 'screens/Home/Home';
 import Profile from 'screens/Profile/Profile';
 import ProfilePerson from 'screens/ProfilePerson/ProfilePerson';
+import ProfileOng from 'screens/ProfileOng/ProfileOng';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -18,6 +19,7 @@ const HomeStack = createStackNavigator(
   {
     Home: Home,
     ProfilePerson: ProfilePerson,
+    ProfileOng: ProfileOng,
   },
   config
 );

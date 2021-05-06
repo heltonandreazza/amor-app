@@ -3,6 +3,7 @@ export const APP_ROUTES = Object.freeze({
   Home: 'Home',
   Profile: 'Profile',
   ProfilePerson: 'ProfilePerson',
+  ProfileOng: 'ProfileOng',
   Welcome: 'Welcome',
   Auth: 'Auth',
   Main: 'Main',
