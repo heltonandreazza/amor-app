@@ -10,9 +10,15 @@ export const BUTTON_SCHEMES = {
   PRIMARY_OUTLINE: 'primaryOutline',
   PRIMARY_LINK: 'primaryLink',
   SECONDARY_LINK: 'secondaryLink',
+  DANGER: 'danger',
 }
 
 export const STYLE_SCHEMES = {
+  danger: {
+    backgroundColor: COLORS.DANGER,
+    color: COLORS.WHITE,
+    borderColor: COLORS.DANGER,
+  },
   primary: {
     backgroundColor: COLORS.PRIMARY,
     color: COLORS.WHITE,

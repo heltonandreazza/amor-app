@@ -44,6 +44,7 @@ HomeStack.path = '';
 const ProfileStack = createStackNavigator(
   {
     Profile: Profile,
+    ProfileOng: ProfileOng,
   },
   config
 );

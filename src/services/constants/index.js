@@ -31,4 +31,15 @@ export const NAVIGATION_EVENTS = {
   DID_BLUR: 'didBlur',
 }
 
-export const API_URL = 'https://opohlreev5.execute-api.sa-east-1.amazonaws.com/dev'
+export const USER_PROFILE = {
+  HOMELESS: 'HOMELESS',
+  ONG: 'ONG',
+  EVENT: 'EVENT',
+}
+
+export const MODE = {
+  VIEW: 'VIEW',
+  EDIT: 'EDIT',
+}
+
+export const API_URL = 'http://amorapp.somee.com'

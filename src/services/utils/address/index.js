@@ -9,5 +9,5 @@ export const getMapsAddress = (address = {}) => {
   return `${address.address}${appendAddress(address.neighborhood)}${appendAddress(address.city)}${appendAddress(
     address.province,
     ' - '
-  )}${appendAddress(address.zipcode)}`
+  )}${appendAddress(address.zip)}`
 }

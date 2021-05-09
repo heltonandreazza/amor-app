@@ -4,7 +4,13 @@ import { COLORS } from 'services/style'
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: '#EFEFEF',
+    backgroundColor: COLORS.WHITE
+  },
+  inputWrapper: {
+    display: 'flex',
+    backgroundColor: COLORS.OFF_WHITE,
+    paddingHorizontal: 8,
+    paddingTop: 8,
   },
   title: {
     padding: 16,
@@ -49,11 +55,18 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 95,
+    height: 95,
     borderWidth: 2.5,
     borderColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.GRAY,
     borderRadius: 500,
+  },
+  imageAddButton: {
+    width: 32,
+    height: 42.5,
+    borderRadius: 0,
+    margin: 4,
   },
   flexCenter: {
     flex: 1,

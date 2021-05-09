@@ -2,9 +2,9 @@
 import * as qs from 'qs'
 import find from 'lodash/find'
 import * as Location from 'expo-location';
-// import { checkLocationPermissionStatus } from 'services/permissions'
 
 const apiUrl = 'https://maps.googleapis.com/maps/api/'
+const apiKey = 'AIzaSyASsC951InqRpnDc_UbUG9-WVjrD4Hnwn8'
 
 export const getCurrentLocation = async () => {
   let { status } = await Location.requestPermissionsAsync();
@@ -12,7 +12,7 @@ export const getCurrentLocation = async () => {
     setErrorMsg('Permission to access location was denied');
     return;
   }
-
+  
   let location = await Location.getCurrentPositionAsync({})
   return location
 }
@@ -23,7 +23,7 @@ export const getAutocompleteAddressPredictions = async (text, addressId) => {
     types: ['address'],
     components: `country:${'br'}`,
     language: 'pt_br',
-    key: 'AIzaSyBOGdrPHuincPjsYRbPYtYtwspeYViWNBw',
+    key: apiKey,
     sessiontoken: addressId,
   })
   const url = `${apiUrl}place/autocomplete/json?${params}`
@@ -35,7 +35,7 @@ export const getAutocompleteAddressPredictions = async (text, addressId) => {
 export const getGeolocationByPlaceId = async placeId => {
   const params = qs.stringify({
     place_id: placeId,
-    key: 'AIzaSyBOGdrPHuincPjsYRbPYtYtwspeYViWNBw',
+    key: apiKey,
   })
   const url = `${apiUrl}place/details/json?${params}`
   const response = await fetch(url)
@@ -46,7 +46,7 @@ export const getGeolocationByPlaceId = async placeId => {
 export const getGeolocationByCoordinates = async (latitude, longitude) => {
   const params = qs.stringify({
     latlng: `${latitude},${longitude}`,
-    key: 'AIzaSyBOGdrPHuincPjsYRbPYtYtwspeYViWNBw',
+    key: apiKey,
   })
   const url = `${apiUrl}geocode/json?${params}`
   const response = await fetch(url)
@@ -68,20 +68,17 @@ export const mapGooglePlaceToUserAddress = place => {
     number: find(addressComponents, component => component.types.includes('street_number')) || {},
     placeId: place?.result?.place_id ?? '',
   }
-
   const userAddress = {
     latitude: googleAddress.location.lat,
     longitude: googleAddress.location.lng,
-    zipcode: googleAddress.postalCode.long_name,
-    street: googleAddress.street.long_name,
+    zip: googleAddress.postalCode.long_name,
     neighborhood: googleAddress.neighborhood.long_name,
     city: googleAddress.city.long_name,
     province: googleAddress.province.short_name,
-    country: googleAddress.country.short_name,
     number: googleAddress.number.long_name,
-    placeId: googleAddress.placeId,
+    street: googleAddress.street.long_name,
+    country: googleAddress.country.short_name,
   }
-
   return userAddress
 }
 
@@ -97,7 +94,7 @@ export const getCurrentPosition = async () => {
 export const getCurrentUserAddress = async () => {
   const { coords: { latitude, longitude } = {} } = await getCurrentPosition()
   const { results: [firstResult] = [] } = await getGeolocationByCoordinates(latitude, longitude)
-  const userAddress = getUserAddressByPlaceId(firstResult.place_id)
+  const userAddress = mapGooglePlaceToUserAddress({ result: firstResult })
   return userAddress
 }
 

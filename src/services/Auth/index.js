@@ -58,12 +58,10 @@ export const resendCodeConfirmation = ({ username }, callback) => {
 }
 
 export const signIn = async ({ username, password }, callback) => {
-  console.log('signIn', { username, password }, callback)
   const authenticationData = {
     Username: username,
     Password: password,
   };
-  console.log('signIn', 1)
   const authenticationDetails = new AuthenticationDetails(
     authenticationData
   );
@@ -71,12 +69,9 @@ export const signIn = async ({ username, password }, callback) => {
     Username: username,
     Pool: userPool,
   };
-  console.log('signIn', 2)
   const cognitoUser = new CognitoUser(userData);
-  console.log('signIn', 3)
   cognitoUser.authenticateUser(authenticationDetails, {
     onSuccess: function(result) {
-      console.log('signIn', 4)
       callback({ 
         result: {
           idToken: result.getIdToken().getJwtToken(),
@@ -87,12 +82,8 @@ export const signIn = async ({ username, password }, callback) => {
       })
     },
     onFailure: function(err) {
-      console.log('signIn', 5)
       console.log('failure', err)
       callback({ err })
-    },
-    newPasswordRequired: function(challenge) {
-      console.log('signIn', 5, challenge)
     },
   });
 }
@@ -119,7 +110,6 @@ export const confirmForgotPassword = ({ username, verificationCode, newPassword 
     Pool: userPool,
   };
   const cognitoUser = new CognitoUser(userData);
-  console.log('confirmForgotPassword', username, verificationCode, newPassword)
   cognitoUser.confirmPassword(verificationCode, newPassword, {
     onSuccess: function(result) {
       callback(result)

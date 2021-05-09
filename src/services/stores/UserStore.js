@@ -5,11 +5,11 @@ import { parseJwt } from 'services/utils'
 
 export const AddressModel = types
   .model('AddressModel', {
-    longitude: types.maybeNull(types.string),
-    latitude: types.maybeNull(types.string),
+    longitude: types.maybeNull(types.number),
+    latitude: types.maybeNull(types.number),
     address: types.maybeNull(types.string),
-    neighbordhood: types.maybeNull(types.string),
-    zipcode: types.maybeNull(types.string),
+    neighborhood: types.maybeNull(types.string),
+    zip: types.maybeNull(types.string),
     city: types.maybeNull(types.string),
     province: types.maybeNull(types.string),
   })
@@ -18,16 +18,16 @@ export const AddressModel = types
       longitude,
       latitude,
       address,
-      neighbordhood,
-      zipcode,
+      neighborhood,
+      zip,
       city,
       province,
     }) {
       self.longitude = longitude
       self.latitude = latitude
       self.address = address
-      self.neighbordhood = neighbordhood
-      self.zipcode = zipcode
+      self.neighborhood = neighborhood
+      self.zip = zip
       self.city = city
       self.province = province
     },
@@ -36,7 +36,6 @@ export const AddressModel = types
 export const UserModel = types
   .model('User', {
     token: types.maybeNull(types.string),
-    accessToken: types.maybeNull(types.string),
     refreshToken: types.maybeNull(types.string),
     userId: types.maybeNull(types.string),
     sub: types.maybeNull(types.string),
@@ -48,16 +47,20 @@ export const UserModel = types
     photos: types.maybeNull(types.array(types.string)),
     document: types.maybeNull(types.string),
     phone: types.maybeNull(types.string),
+    profile: types.maybeNull(types.string),
   })
   .views(self => ({
     get tokenExpirationDate() {
-      const tokenPayload = parseJwt(self.accessToken)
-      const tokenExpiration = get(tokenPayload, 'exp', 0) * 1000
-      return tokenExpiration
+      const expirationISODate = self.refreshToken
+      return self.refreshToken ? new Date(expirationISODate) : null
     },
   }))
   .actions(self => ({
     setInfo({ 
+      token = self.token,
+      refreshToken = self.refreshToken,
+      userId = self.userId,
+      sub = self.sub,
       email = self.email,
       name = self.name,
       about = self.about,
@@ -66,7 +69,27 @@ export const UserModel = types
       photos = self.photos,
       document = self.document,
       phone = self.phone,
+      profile = self.profile,
     }) {
+      // console.log('setInfo', {
+      //   token,
+      //   refreshToken,
+      //   userId,
+      //   sub,
+      //   email,
+      //   name,
+      //   about,
+      //   needs,
+      //   address,
+      //   photos,
+      //   document,
+      //   phone,
+      //   profile,
+      // })
+      self.token = token
+      self.refreshToken = refreshToken
+      self.userId = userId
+      self.sub = sub
       self.email = email
       self.name = name
       self.about = about
@@ -75,11 +98,9 @@ export const UserModel = types
       self.photos = photos
       self.document = document
       self.phone = phone
+      self.profile = profile
     },
     setToken(token) {
       self.token = token
-    },
-    setAccessToken(accessToken) {
-      self.accessToken = accessToken
     },
   }))

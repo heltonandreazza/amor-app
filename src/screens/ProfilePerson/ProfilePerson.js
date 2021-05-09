@@ -22,7 +22,7 @@ const ProfilePerson = ({ navigation }) => {
   const [selectedAddress, setSelectedAddress] = useState({})
   const user = navigation.getParam('profile')
 
-  const adressDesc = user?.address?.address ? `${user?.address?.address} - ${user?.address?.neighbordhood}, ${user?.address?.province}` : ''
+  const adressDesc = user?.address?.address ? `${user?.address?.address} - ${user?.address?.neighborhood}, ${user?.address?.province}` : ''
 
   return useObserver(() => (
     <Container title={i18n.t('profile.title')}>

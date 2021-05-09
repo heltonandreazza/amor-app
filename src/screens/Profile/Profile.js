@@ -1,83 +1,76 @@
 import Text from 'components/atoms/Text'
 import Button from 'components/molecules/Button'
 import IconCard from 'components/molecules/IconCard'
-import AddressSearchInput, { getAddressInputTextValue } from 'components/organisms/AddressSearchInput'
+import { getAddressInputTextValue } from 'components/organisms/AddressSearchInput'
 import Container from 'components/organisms/Container'
 import i18n from 'i18n-js'
 import { useObserver } from 'mobx-react-lite'
-import React, { useState, useContext } from 'react'
+import React, { useContext, useState, useLayoutEffect } from 'react'
 import { View } from 'react-native'
-import MapView, { Marker } from 'react-native-maps'
-import { APP_ROUTES } from 'services/constants'
+import { fetchOng } from 'services/client'
+import { APP_ROUTES, MODE, USER_PROFILE } from 'services/constants'
+import { AppStoreContext } from 'services/stores'
 import { COLORS } from 'services/style'
 import { BUTTON_SCHEMES } from '../../components/molecules/Button/styles'
 import styles from './styles'
-import { AppStoreContext } from 'services/stores'
-import { MODE, openLink } from 'services/utils'
-import { appendAddress, getMapsAddress } from 'services/utils/address'
-
-const DATA = [{ id: 1, value: 'item data value 1' }, { id: 2, value: 'zuera né' }, { id: 2, value: 'zuera a' }, { id: 2, value: 'zuera b' }]
 
 const SHOW_FIELDS = [
   { key: 'name', label: 'Nome'},
   { key: 'email', label: 'Email'},
-  { key: 'document', label: 'CPF/CNPJ'},
   { key: 'phone', label: 'Telefone'},
 ]
 
 const Profile = ({ navigation }) => {
-  const [mode, setMode] = useState(MODE.VIEW)
-  const [selectedAddress, setSelectedAddress] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [ongData, setOngData] = useState(false)
   const appStore = useContext(AppStoreContext)
-  const user = {
-    token: 'token',
-    accessToken: 'accessToken',
-    refreshToken: 'refreshToken',
-    userId: '123',
-    email: 'helton.prg@gmail.com',
-    name: 'Helton Andreazza',
-    about: 'about',
-    needs: 'needs',
-    address: {
-      latitude: -26.828862,
-      longitude: -49.282108,
-      address: 'Rua Barata Ribeiro',
-      neighborhood: 'Bela Vista',
-      zipcode: '01308000',
-      city: 'Sao Paulo',
-      province: 'SP',
-    },
-    photos: ['https://i1.wp.com/terracoeconomico.com.br/wp-content/uploads/2019/01/default-user-image.png'],
-    document: '07722584965',
-    phone: '11976348417',
-  }
-  // const user = appStore?.user
+  const user = appStore?.user ?? {}
 
   const logout = () => {
-    appStore.logout(navigation)
+    appStore.logout()
     navigation.navigate(APP_ROUTES.Auth)
   }
 
-  const adressDesc = user?.address?.address ? `${user?.address?.address} - ${user?.address?.neighborhood}, ${user?.address?.province}` : ''
+  async function fetchOngData() {
+    setIsLoading(true)
+    try {
+      const ongData = await fetchOng()
+      if(appStore.user) {
+        appStore.user.setInfo(ongData)
+      } else {
+        appStore.setUser(ongData)
+      }
+      setOngData(ongData)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
+  useLayoutEffect(() => {
+    if (user?.profile === USER_PROFILE.ONG) {
+      fetchOngData()
+    }
+  }, [])
+
+  const adressDesc = getAddressInputTextValue(user?.address)
+  
   return useObserver(() => (
-    <Container title={i18n.t('profile.title')}>
+    <Container title={i18n.t('profile.title')} isLoading={isLoading}>
       <View style={styles.container}>
-        {user?.about && mode === MODE.VIEW ? 
-          <View>
-            <IconCard
-              iconColor={COLORS.PRIMARY}
-              imageSource={{ uri: user?.photos ? user.photos[0] : 'https://i1.wp.com/terracoeconomico.com.br/wp-content/uploads/2019/01/default-user-image.png' }}
-              description={<View><Text bold>{`${user.name}\n`}</Text><Text style={{ fontSize: 12 }}>{adressDesc}</Text></View>}
-              onPress={() => navigation.navigate({ routeName: APP_ROUTES.Recipe, params: { id: 1 } })}
-              descriptionStyle={{ paddingVertical: 8 }} 
-              styleImage={{ borderRadius: 36 }}
-              styleImageWrapper={{ borderRadius: 36 }}
-              textColor={COLORS.NIGHT_RIDER}
-              height={null}
-            />   
-          </View>
-        : null}
+        <View>
+          <IconCard
+            iconColor={COLORS.PRIMARY}
+            imageSource={{ uri: user?.photos && `data:image/jpeg;base64,${user?.photos[0]}` }}
+            description={<View><Text bold>{`${user.name}\n`}</Text><Text style={{ fontSize: 12 }}>{adressDesc}</Text></View>}
+            descriptionStyle={{ paddingVertical: 8 }} 
+            styleImage={{ borderRadius: 36 }}
+            styleImageWrapper={{ borderRadius: 36 }}
+            textColor={COLORS.NIGHT_RIDER}
+            height={null}
+          />   
+        </View>
         {
           SHOW_FIELDS.map(field => {
             const value = user[field.key]
@@ -93,35 +86,22 @@ const Profile = ({ navigation }) => {
             )
           })
         }
-        {/* ADDRESS */}
-        {user?.address && mode === MODE.EDIT ? 
-          <View>
-            <AddressSearchInput
-              handleSelectedAddress={adressObject => {
-                setSelectedAddress(adressObject)
-              }}
-              defaultAddress={getAddressInputTextValue(selectedAddress)}
-            />
-          </View>
-          : null
-        }
         {/* ACTIONS */}
         <View style={{ marginTop: 8 }} />
-        {mode === MODE.VIEW ?
+        {user?.profile === USER_PROFILE.ONG ?
           <View>
-            <Button title="Editar dados" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => setMode(MODE.EDIT)}/>
+            <Button
+              title="Editar minha ONG"
+              style={{ marginVertical: 8, marginHorizontal: 8 }}
+              onPress={() => navigation.navigate({
+                routeName: APP_ROUTES.ProfileOng,
+                params: { profile: ongData, mode: MODE.EDIT, profileType: USER_PROFILE.ONG }
+              })}/>
           </View>
         : null}
-        {mode === MODE.EDIT ?
-          <View>
-            <Button title="Salvar" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => setMode(MODE.VIEW)}/>
-          </View>
-        : null}
-        {!user?.type ?
-          <View>
-            <Button scheme={BUTTON_SCHEMES.SECONDARY_LINK} title="Sair" style={{ marginVertical: 8, marginHorizontal: 8 }} onPress={logout}/>
-          </View>
-        : null}
+        <View>
+          <Button scheme={BUTTON_SCHEMES.SECONDARY_LINK} title="Sair" style={{ marginVertical: 8, marginHorizontal: 8 }} onPress={logout}/>
+        </View>
       </View>
     </Container>
   ))

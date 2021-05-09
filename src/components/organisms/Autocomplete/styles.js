@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: COLORS.WHITE,
+    backgroundColor: COLORS.OFF_WHITE,
   },
   inputRightIcon: {
     zIndex: 3,

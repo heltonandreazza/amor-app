@@ -20,7 +20,7 @@ const Autocomplete = ({ isLoading, onClearPress, inputProps, flatListProps }) =>
     <>
       {isLoading ? <Loading fullScreen /> : null}
       <View style={styles.container}>
-        <Row style={{ padding: 16 }}>
+        <Row style={{ paddingTop: 16, paddingHorizontal: 8 }}>
           <Input
             inputRef={inputProps.inputRef}
             errorMessage={inputProps.errorMessage}

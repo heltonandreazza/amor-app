@@ -29,17 +29,6 @@ export const textTruncate = (str, length = 100, ending = '...') => {
   return str
 }
 
-export const MODE = {
-  VIEW: 'VIEW',
-  EDIT: 'EDIT',
-}
-
-export const TYPE = {
-  HOMELESS: 'HOMELESS',
-  ONG: 'ONG',
-  EVENT: 'EVENT',
-}
-
 export const openLink = async url => {
   const supported = await Linking.canOpenURL(url)
 

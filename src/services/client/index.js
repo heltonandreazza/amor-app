@@ -6,24 +6,33 @@ import { getAuthenticatedUser } from '../Auth'
 import forIn from 'lodash/forIn'
 import get from 'lodash/get'
 import { alertStore } from 'services/stores/AlertStore'
-import { signIn } from 'services/Auth'
 
 const DEFAULT_HEADERS = {
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'accept': '*/*',
 }
 
 const getHeaders = () => {
-  const headers = {
-    ...DEFAULT_HEADERS,
-    Authorization: appStore.user ? appStore.user.token : '',
+  let headers = { ...DEFAULT_HEADERS }
+  if(appStore?.user?.token) {
+    headers = {
+      ...headers,
+      Authorization: appStore?.user?.token ? `Bearer ${appStore.user.token}` : '',
+    }
   }
   return headers
 }
 
-export const postData = async (data = {}, path = '', url = API_URL) => {
+export const mutateData = async (data = {}, path = '', method = 'POST', url = API_URL) => {
+  console.log('post', path, method)
+  // console.log('post', {
+  //   headers: getHeaders(),
+  //   method: method, // *GET, POST, PUT, DELETE, etc.
+  //   body: JSON.stringify(data)
+  // })
   const httpCall = () => fetch(`${url}${path}`, {
     headers: getHeaders(),
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    method: method, // *GET, POST, PUT, DELETE, etc.
     body: JSON.stringify(data)
   })
   return await makeHttpCall(httpCall)
@@ -45,50 +54,66 @@ export const fetchData = async (path = '', params = {}, url = API_URL) => {
   return await makeHttpCall(httpCall)
 }
 
-const loginUser = async response => {
-  if (response.err) {
-    console.log('Error login user ', response.err)
+const loginUser = async (response) => {
+  if (response?.status > 400) {
+    console.log('Error login user ', response.title)
     alertStore.setAlert({
       type: FEEDBACK.DANGER,
       message: i18n.t('login.messages.loginFailed'),
     })
   } else {
-    if (response.result) {
+    if (response) {
       const user = {
-        email: appStore.user.email,
-        token: get(response, 'result.idToken', appStore.user.token),
-        accessToken: get(response, 'result.accessToken', appStore.user.accessToken),
-        refreshToken: get(response, 'result.refreshToken', appStore.user.refreshToken),
-        userId: get(response, 'result.userId', appStore.user.userId),
-        sub: appStore.user.sub,
+        token: get(response, 'token', appStore?.user?.token),
+        refreshToken: get(response, 'expiration', appStore?.user?.refreshToken),
+        userId: Number(get(response, 'person.id', appStore?.user?.userId)).toString(),
+        phone: get(response, 'person.phone', appStore?.user?.phone),
+        name: get(response, 'person.name', appStore?.user?.name),
+        address: get(response, 'address', appStore?.user?.address),
       }
-      appStore.setUser(user)
+      console.log('LoginUser client', response, user, appStore.user)
+      if(appStore.user) {
+        appStore.user.setInfo(user)
+      } else {
+        appStore.setUser(user)
+      }
     }
   }
 }
 
 const makeHttpCall = async httpCall => {
   let responseJson
-
   try {
     const tokenExpirationDate = get(appStore, 'user.tokenExpirationDate')
     const shouldRefreshToken = tokenExpirationDate && tokenExpirationDate < new Date()
     if (shouldRefreshToken) {
-      await new Promise(resolve => setTimeout(() => resolve(), 5000))
-      responseRefreshToken = signIn({
-        username: appStore.user.email,
-        password: appStore.user.sub
-      }, loginUser)
+      try {
+        debugger
+        r = await fetch(`${API_URL}'/Authentication/SignIn'`, {
+          headers: { ...DEFAULT_HEADERS },
+          method: 'POST',
+          body: JSON.stringify({
+            email: appStore?.user?.email,
+            password: appStore?.user?.sub
+          })
+        })
+        responseRefreshToken = await r.json()
+        debugger
+        console.log('responseRefreshToken', responseRefreshToken)
+        await loginUser(responseRefreshToken)
+        debugger
+      } catch (e) {
+        console.log(`login: ${e}`)
+        appStore.logout()
+      }
     }
 
     const response = await httpCall(httpCall)
     responseJson = await response.json()
+    // console.log('makeHttpCall: response', responseJson)
 
-    if (responseJson.message) {
-      // console.log('makeHttpCall: ', responseJson)
-    }
   } catch (err) {
-    console.log('makeHttpCall: ', err)
+    console.log('makeHttpCall: error ', err)
     responseJson = err
   }
 
@@ -103,34 +128,65 @@ export const deleteData = async (path = '', url = API_URL) => {
 }
 
 export const fetchMe = async () => {
-  return await fetchData(`/ac-profile/me`)
+  return await fetchData(`/User`)
 }
 
-export const fetchMeasures = async () => {
-  return await fetchData(`/ac-indicators/measures/me`)
+export const fetchOng = async () => {
+  return await fetchData(`/Ong`)
 }
 
-export const fetchConcepts = async () => {
-  return await fetchData(`/ac-indicators/concepts/me`)
+const getParams = ({ 
+  phone,
+  name,
+  document,
+  about,
+  startDate,
+  endDate,
+  openingTime,
+  closingTime,
+  photos,
+  address,
+  supporters,
+  pageProfileLink,
+}) => {
+  let params = {}
+
+  if (phone) params = {...params, phone}
+  if (name) params = {...params, name}
+  if (document) params = {...params, document}
+  if (about) params = {...params, about}
+  if (openingTime) params = {...params, openingTime}
+  if (closingTime) params = {...params, closingTime}
+  if (startDate) params = {...params, startDate: startDate ? startDate.toISOString() : null}
+  if (endDate) params = {...params, endDate: endDate ? endDate.toISOString() : null}
+  if (photos) params = {...params, photos}
+  if (address) params = {...params, address}
+  if (supporters) params = {...params, supporters}
+  if (pageProfileLink) params = {...params, pageProfileLink}
+
+  return params
 }
 
-export const fetchFrequencies = async () => {
-  return await fetchData(`/ac-indicators/frequencies/me`)
+export const mutateOng = async (props) => {
+  const params = getParams(props)
+  console.log('mutateOng', params)
+  const data = await mutateData(params, '/Ong', 'PUT');
+  return data
 }
 
-export const fetchProfileById = async (profileId) => {
-  const userData = await fetchData(`/ac-profile/${profileId}`)
-  return userData
+export const mutateEvent = async (props) => {
+  const params = getParams(props)
+  console.log('mutateEvent', params)
+  const data = await mutateData(params, '/Event', 'PUT');
+  return data
 }
 
-export const mutateProfileUserId = async (profileId, userId) => {
-  const userData = await fetchData(`/ac-profile/${profileId}`)
-  const data = await postData({ 
-    key: 'c75af2f5-0fab-4fc0-8f54-2bd355bbe27a',
-    items: [{
-      CODIGO: profileId,
-      USER_ID: userId
-    }]
-  }, '/ac-profile');
-  return userData
+export const signIn = async ({ email, password }) => {
+  const data = await mutateData({ email, password }, '/Authentication/SignIn');
+  return data
+}
+
+export const signUp = async ({ email, password, phone, name, document }) => {
+  const data = await mutateData({ email, password, phone, name, document }, '/Authentication/SignUp');
+  return data
 }

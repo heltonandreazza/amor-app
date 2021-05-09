@@ -24,7 +24,7 @@ import Text from 'components/atoms/Text'
 import styles from './styles'
 
 export const getAddressInputTextValue = addressObject =>
-  `${addressObject?.street ?? ''}${addressObject?.number ? `, ${addressObject?.number}` : ''}`
+  `${addressObject?.street ?? ''}${addressObject?.number ? `, ${addressObject?.number}` : ''}${addressObject?.neighborhood ? ` - ${addressObject?.neighborhood}` : ''}${addressObject?.city ? `, ${addressObject?.city}` : ''}`
 
 const AddressSearchInput = ({
   handleSelectedAddress,

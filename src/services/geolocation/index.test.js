@@ -14,7 +14,7 @@ const mappedAddressRuaBarataRibeiro = {
   number: '284',
   province: 'SP',
   street: 'Rua Barata Ribeiro',
-  zipcode: '01308-000',
+  zip: '01308-000',
 }
 
 jest.mock('expo-location', () => ({

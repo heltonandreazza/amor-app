@@ -13,7 +13,7 @@ export default {
     hi: 'Oi'
   },
   profile: {
-    title: 'Perfil',
+    title: 'Perfil Do Usuário',
     greet: 'Olá, ',
     logout: 'Sair',
     logoutModal: {
@@ -47,7 +47,7 @@ export default {
     clickHere: 'Clique aqui!',
     alreadyHaveAccountNotConfirmed: 'Ainda não confirmou seu e-mail?',
     userName: 'Digite seu nome',
-    cpf: 'Digite o seu CPF',
+    cpf: 'Digite o seu CPF/CNPJ',
     phoneNumber: 'Digite o seu telefone',
     forgotPassword: 'Esqueci minha senha',
     messages: {
@@ -59,7 +59,7 @@ export default {
       invalidPassword: 'Senha precisa ao menos 6 caracteres, com letras e números',
       emailConfirmedWithSuccess: 'Sua conta foi criada com sucesso!',
       emailPasswordConfirmedWithSuccess: 'Sua senha foi atualizada com sucesso!',
-      accountCreatedWithSuccess: 'Enviamos o código para o seu email! Deverá chegar em menos de 3 minutos!',
+      accountCreatedWithSuccess: 'Conta criada com sucesso!',
       forgotPasswordCreatedWithSuccess: 'Enviamos o código para o seu email! Deverá chegar em menos de 3 minutos!',
       weveResentCode: 'Reenviamos o código para o seu email! Confira novamente!',
       UsernameExistsException: 'Usuário já existe com este e-mail',

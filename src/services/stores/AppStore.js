@@ -28,7 +28,6 @@ const AppStore = types
       self.isReady = isReady
     },
     setUser(user) {
-      console.log('setUser', user)
       self.user = user
     },
     setProfile(profile) {
@@ -39,8 +38,6 @@ const AppStore = types
     },
     logout() {
       destroy(self.user)
-      if (self.profile) destroy(self.profile)
-      logout()
     },
     // bootstrap:
     afterCreate() {
