@@ -2,10 +2,11 @@ import Text from 'components/atoms/Text'
 import Button from 'components/molecules/Button'
 import IconCard from 'components/molecules/IconCard'
 import { getAddressInputTextValue } from 'components/organisms/AddressSearchInput'
+import userImg from '../../assets/user.png'
 import Container from 'components/organisms/Container'
 import i18n from 'i18n-js'
 import { useObserver } from 'mobx-react-lite'
-import React, { useContext, useState, useLayoutEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { View } from 'react-native'
 import { fetchOng } from 'services/client'
 import { APP_ROUTES, MODE, USER_PROFILE } from 'services/constants'
@@ -15,6 +16,7 @@ import { BUTTON_SCHEMES } from '../../components/molecules/Button/styles'
 import styles from './styles'
 
 const SHOW_FIELDS = [
+  { key: 'userId', label: 'Id'},
   { key: 'name', label: 'Nome'},
   { key: 'email', label: 'Email'},
   { key: 'phone', label: 'Telefone'},
@@ -48,7 +50,7 @@ const Profile = ({ navigation }) => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (user?.profile === USER_PROFILE.ONG) {
       fetchOngData()
     }
@@ -56,14 +58,25 @@ const Profile = ({ navigation }) => {
 
   const adressDesc = getAddressInputTextValue(user?.address)
   
+  function renderDescription () {
+    return (
+      <View>
+        <Text bold>{`${user.name}\n`}</Text>
+        {adressDesc ? 
+          <Text style={{ fontSize: 12 }}>{adressDesc}</Text>
+        : null}
+      </View>
+    )
+  }
+
   return useObserver(() => (
     <Container title={i18n.t('profile.title')} isLoading={isLoading}>
       <View style={styles.container}>
         <View>
           <IconCard
             iconColor={COLORS.PRIMARY}
-            imageSource={{ uri: user?.photos && `data:image/jpeg;base64,${user?.photos[0]}` }}
-            description={<View><Text bold>{`${user.name}\n`}</Text><Text style={{ fontSize: 12 }}>{adressDesc}</Text></View>}
+            imageSource={user?.photos?.length ? { uri: `data:image/jpeg;base64,${user?.photos[0]}` } : userImg}
+            description={renderDescription()}
             descriptionStyle={{ paddingVertical: 8 }} 
             styleImage={{ borderRadius: 36 }}
             styleImageWrapper={{ borderRadius: 36 }}

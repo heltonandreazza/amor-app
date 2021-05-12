@@ -14,14 +14,6 @@ const styles = StyleSheet.create({
     width: 280,
     textAlign: 'center',
   },
-  autocompleteContainer: {
-    flex: 1,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    zIndex: 1
-  },
   containerButton: {
     flexDirection: 'row',
     backgroundColor: COLORS.WHITE,
@@ -31,6 +23,18 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height * .25,
+  },
+  iconButton: {
+    justifyContent: 'center',
+    padding: 16,
+    minWidth: 48,
+    minHeight: 48,
+  },
+  inputWrapper: {
+    display: 'flex',
+    backgroundColor: COLORS.OFF_WHITE,
+    paddingHorizontal: 8,
+    paddingTop: 8,
   },
 })
 

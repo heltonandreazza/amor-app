@@ -12,6 +12,9 @@ export const AddressModel = types
     zip: types.maybeNull(types.string),
     city: types.maybeNull(types.string),
     province: types.maybeNull(types.string),
+    country: types.maybeNull(types.string),
+    number: types.maybeNull(types.string),
+    street: types.maybeNull(types.string),
   })
   .actions(self => ({
     setAddress({
@@ -22,6 +25,9 @@ export const AddressModel = types
       zip,
       city,
       province,
+      country,
+      number,
+      street,
     }) {
       self.longitude = longitude
       self.latitude = latitude
@@ -30,6 +36,9 @@ export const AddressModel = types
       self.zip = zip
       self.city = city
       self.province = province
+      self.country = country
+      self.number = number
+      self.street = street
     },
   }))
 
@@ -59,7 +68,7 @@ export const UserModel = types
     setInfo({ 
       token = self.token,
       refreshToken = self.refreshToken,
-      userId = self.userId,
+      id = self.userId,
       sub = self.sub,
       email = self.email,
       name = self.name,
@@ -71,24 +80,24 @@ export const UserModel = types
       phone = self.phone,
       profile = self.profile,
     }) {
-      // console.log('setInfo', {
-      //   token,
-      //   refreshToken,
-      //   userId,
-      //   sub,
-      //   email,
-      //   name,
-      //   about,
-      //   needs,
-      //   address,
-      //   photos,
-      //   document,
-      //   phone,
-      //   profile,
-      // })
+      console.log('setInfo', {
+        token,
+        refreshToken,
+        id,
+        sub,
+        email,
+        name,
+        about,
+        needs,
+        address,
+        photos,
+        document,
+        phone,
+        profile,
+      })
       self.token = token
       self.refreshToken = refreshToken
-      self.userId = userId
+      self.userId = `${id}`
       self.sub = sub
       self.email = email
       self.name = name

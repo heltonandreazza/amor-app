@@ -49,8 +49,11 @@ export const getGeolocationByCoordinates = async (latitude, longitude) => {
     key: apiKey,
   })
   const url = `${apiUrl}geocode/json?${params}`
+  console.log('getGeolocationByCoordinates', url)
   const response = await fetch(url)
+  console.log('getGeolocationByCoordinates', response)
   const responseJson = await response.json()
+  console.log('getGeolocationByCoordinates', responseJson)
   return responseJson
 }
 
@@ -94,7 +97,9 @@ export const getCurrentPosition = async () => {
 export const getCurrentUserAddress = async () => {
   const { coords: { latitude, longitude } = {} } = await getCurrentPosition()
   const { results: [firstResult] = [] } = await getGeolocationByCoordinates(latitude, longitude)
+  console.log('firstResult', firstResult)
   const userAddress = mapGooglePlaceToUserAddress({ result: firstResult })
+  console.log('userAddress', userAddress)
   return userAddress
 }
 

@@ -1,27 +1,29 @@
+import DateTimePicker from '@react-native-community/datetimepicker'
 import Icon from 'components/atoms/Icon'
 import Text from 'components/atoms/Text'
 import Button from 'components/molecules/Button'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import CommentInput from 'components/molecules/CommentInput'
 import IconCard from 'components/molecules/IconCard'
 import Input from 'components/molecules/Input'
 import AddressSearchInput, { getAddressInputTextValue } from 'components/organisms/AddressSearchInput'
 import Container from 'components/organisms/Container'
 import * as ImagePicker from 'expo-image-picker'
-import i18n from 'i18n-js'
 import { useObserver } from 'mobx-react-lite'
 import React, { useContext, useState } from 'react'
 import { Image, ImageBackground, ScrollView, View } from 'react-native'
-import { APP_ROUTES, MODE, USER_PROFILE, FEEDBACK } from 'services/constants'
+import { fetchOng, mutateEvent, mutateOng } from 'services/client'
+import { APP_ROUTES, FEEDBACK, MODE, USER_PROFILE } from 'services/constants'
 import { AlertStoreContext, AppStoreContext } from 'services/stores'
 import { COLORS, ICON_SIZE } from 'services/style'
 import { openLink } from 'services/utils'
-import { mutateOng, mutateEvent, fetchOng } from 'services/client'
 import { getMapsAddress } from 'services/utils/address'
+import VMasker from 'vanilla-masker'
 import handsEvent from '../../assets/handsEvent.png'
 import handsOng from '../../assets/handsOng.png'
 import { BUTTON_SCHEMES } from '../../components/molecules/Button/styles'
 import styles from './styles'
+
+const maskHour = value => value ? VMasker.toPattern(value, '99:99') : value
 
 const getDefaultDate = () => {
   const d = new Date()
@@ -34,7 +36,6 @@ const ProfileOng = ({ navigation }) => {
   const appStore = useContext(AppStoreContext)
   const profile = navigation.getParam('profile')
   const profileType = navigation.getParam('profileType')
-  const isNew = navigation.getParam('isNew')
   const modeParam = navigation.getParam('mode') || MODE.VIEW
   const [mode, setMode] = useState(modeParam)
   const [selectedButton, setSelectedButton] = useState(0)
@@ -51,7 +52,7 @@ const ProfileOng = ({ navigation }) => {
   const [supporters, setSupporters] = useState(profile?.supporters)
   const [mainPhoto, setMainPhoto] = useState(photos?.length ? photos[0] : null)
   const [about, setAbout] = useState(profile?.about)
-  const [selectedAddress, setSelectedAddress] = useState(profile?.address || {})
+  const [selectedAddress, setSelectedAddress] = useState(profileType == USER_PROFILE.EVENT ? (profile?.eventAddress || {}) : (profile?.address || {}))
   // inputs ong
   const [openingTime, setOpeningTime] = useState(profile?.openingTime)
   const [closingTime, setClosingTime] = useState(profile?.closingTime)
@@ -59,7 +60,6 @@ const ProfileOng = ({ navigation }) => {
   const [startDate, setStartDate] = useState(profile?.startDate ? new Date(profile?.startDate) : getDefaultDate())
   const [endDate, setEndDate] = useState(profile?.endDate ? new Date(profile?.endDate) : getDefaultDate())
   const [pageProfileLink, setPageProfileLink] = useState(profile?.pageProfileLink || '')
-  
   const onChangeStartDate = (event, selectedDate) => {
     const currentDate = selectedDate
     currentDate.setSeconds(0)
@@ -132,6 +132,7 @@ const ProfileOng = ({ navigation }) => {
     try {
       setIsLoading(true)
       let params = { 
+        id: profile?.id,
         phone: phone,
         name: name,
         document: document,
@@ -139,13 +140,13 @@ const ProfileOng = ({ navigation }) => {
         photos: photos,
         address: selectedAddress,
         supporters: supporters,
+        pageProfileLink: pageProfileLink,
       }
       if (profileType == USER_PROFILE.EVENT) {
         params = {
           ...params,
           startDate: !startDate?.getSeconds() ? startDate : null,
           endDate: !endDate?.getSeconds() ? endDate : null,
-          pageProfileLink: pageProfileLink,
         }
       } else {
         params = {
@@ -156,7 +157,6 @@ const ProfileOng = ({ navigation }) => {
       }
       let response
       if (profileType == USER_PROFILE.EVENT) {
-        console.log('mutateEvent', params)
         response = await mutateEvent(params)
       } else {
         response = await mutateOng(params)
@@ -282,11 +282,11 @@ const ProfileOng = ({ navigation }) => {
                       <Text bold>{name}</Text>
                     </View>
                   </IconCard>
-                  <IconCard iconName="phone" description={phone}/>
+                  { profileType == USER_PROFILE.ONG && <IconCard iconName="phone" description={phone}/>}
                   <IconCard iconName="heart" description={about}/>
+                  { profileType == USER_PROFILE.EVENT && <IconCard iconName="earth" description={pageProfileLink}/>}
                   { profileType == USER_PROFILE.ONG && <IconCard iconName="clock" description={`${openingTime} - ${closingTime}`}/>}
                   { profileType == USER_PROFILE.EVENT && <IconCard iconName="clock" description={`${startDate ? startDate.toLocaleString() : ''} - ${endDate ? endDate.toLocaleString() : ''}`}/>}
-                  { profileType == USER_PROFILE.EVENT && <IconCard iconName="earth" description={pageProfileLink}/>}
                 </View> : null
               }
               {mode === MODE.EDIT ? 
@@ -307,23 +307,33 @@ const ProfileOng = ({ navigation }) => {
                     />
                   </View>
                   <View style={styles.inputWrapper}>
+                    { profileType == USER_PROFILE.ONG && 
+                      <Input
+                        label={'Phone'}
+                        value={phone}
+                        onChangeText={value => setPhone(value)}
+                      />
+                    }
+                  </View>
+                  <View style={styles.inputWrapper}>
                     <Input
-                      label={'Phone'}
-                      value={phone}
-                      onChangeText={value => setPhone(value)}
+                      label={'link página do evento'}
+                      value={pageProfileLink}
+                      onChangeText={value => setPageProfileLink(value)}
+                      autoCapitalize="none"
                     />
                   </View>
                   {profileType === USER_PROFILE.ONG &&
                     <View style={[styles.inputWrapper, { flexDirection: 'row' }]}>
                       <Input 
                         label={'Hora abertura'}
-                        value={openingTime}
+                        value={maskHour(openingTime)}
                         onChangeText={value => setOpeningTime(value)}
                         autoCapitalize="none"
                       />
                       <Input
                         label={'Hora fechamento'}
-                        value={closingTime}
+                        value={maskHour(closingTime)}
                         onChangeText={value => setClosingTime(value)}
                         autoCapitalize="none"
                       />
@@ -331,14 +341,6 @@ const ProfileOng = ({ navigation }) => {
                   }
                   {profileType === USER_PROFILE.EVENT &&
                     <>
-                      <View>
-                        <Input
-                          label={'link página do evento'}
-                          value={pageProfileLink}
-                          onChangeText={value => setPageProfileLink(value)}
-                          autoCapitalize="none"
-                        />
-                      </View>
                       <View style={[styles.inputWrapper, { flexDirection: 'row' }]}>
                         <Input 
                           label={'Data abertura'}
@@ -423,8 +425,8 @@ const ProfileOng = ({ navigation }) => {
         <View style={{ marginTop: 8 }} />
         {mode === MODE.VIEW ?
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <Button title="Doar pessoalmente" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => openLink(encodeURI(`https://maps.google.com/maps?daddr=${getMapsAddress(address)}`))}/>
-            <Button title="Doar online" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Payment })}/>
+            <Button title="Doar pessoalmente" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => openLink(encodeURI(`https://maps.google.com/maps?daddr=${getMapsAddress(selectedAddress)}`))}/>
+            <Button title="Doar online" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Payment, params: { ongId: profileType == USER_PROFILE.EVENT ? profile?.ongId : profile?.id } })}/>
           </View>
         : null}
         {mode === MODE.EDIT ?

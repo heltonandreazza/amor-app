@@ -1,11 +1,9 @@
 import i18n from 'i18n-js'
-
-import { API_URL, FEEDBACK } from 'services/constants'
-import { appStore } from 'services/stores/AppStore'
-import { getAuthenticatedUser } from '../Auth'
 import forIn from 'lodash/forIn'
 import get from 'lodash/get'
+import { API_URL, FEEDBACK } from 'services/constants'
 import { alertStore } from 'services/stores/AlertStore'
+import { appStore } from 'services/stores/AppStore'
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
@@ -24,12 +22,11 @@ const getHeaders = () => {
 }
 
 export const mutateData = async (data = {}, path = '', method = 'POST', url = API_URL) => {
-  console.log('post', path, method)
-  // console.log('post', {
-  //   headers: getHeaders(),
-  //   method: method, // *GET, POST, PUT, DELETE, etc.
-  //   body: JSON.stringify(data)
-  // })
+  console.log('mutateData', data, `${url}${path}`, {
+    headers: getHeaders(),
+    method: method, // *GET, POST, PUT, DELETE, etc.
+    body: JSON.stringify(data)
+  })
   const httpCall = () => fetch(`${url}${path}`, {
     headers: getHeaders(),
     method: method, // *GET, POST, PUT, DELETE, etc.
@@ -71,7 +68,6 @@ const loginUser = async (response) => {
         name: get(response, 'person.name', appStore?.user?.name),
         address: get(response, 'address', appStore?.user?.address),
       }
-      console.log('LoginUser client', response, user, appStore.user)
       if(appStore.user) {
         appStore.user.setInfo(user)
       } else {
@@ -88,7 +84,7 @@ const makeHttpCall = async httpCall => {
     const shouldRefreshToken = tokenExpirationDate && tokenExpirationDate < new Date()
     if (shouldRefreshToken) {
       try {
-        debugger
+        console.log('responseRefreshToken1', `${API_URL}'/Authentication/SignIn'`)
         r = await fetch(`${API_URL}'/Authentication/SignIn'`, {
           headers: { ...DEFAULT_HEADERS },
           method: 'POST',
@@ -97,21 +93,19 @@ const makeHttpCall = async httpCall => {
             password: appStore?.user?.sub
           })
         })
+        console.log('responseRefreshToken2', r)
         responseRefreshToken = await r.json()
-        debugger
-        console.log('responseRefreshToken', responseRefreshToken)
+        console.log('responseRefreshToken3', responseRefreshToken)
         await loginUser(responseRefreshToken)
-        debugger
       } catch (e) {
-        console.log(`login: ${e}`)
+        console.log(`makeHttpCall: ${e}`)
         appStore.logout()
       }
     }
 
     const response = await httpCall(httpCall)
+    console.log('makeHttpCall: response', response)
     responseJson = await response.json()
-    // console.log('makeHttpCall: response', responseJson)
-
   } catch (err) {
     console.log('makeHttpCall: error ', err)
     responseJson = err
@@ -136,10 +130,12 @@ export const fetchOng = async () => {
 }
 
 const getParams = ({ 
+  id,
   phone,
   name,
   document,
   about,
+  needs,
   startDate,
   endDate,
   openingTime,
@@ -151,10 +147,12 @@ const getParams = ({
 }) => {
   let params = {}
 
+  if (id) params = {...params, id}
   if (phone) params = {...params, phone}
   if (name) params = {...params, name}
   if (document) params = {...params, document}
   if (about) params = {...params, about}
+  if (needs) params = {...params, needs}
   if (openingTime) params = {...params, openingTime}
   if (closingTime) params = {...params, closingTime}
   if (startDate) params = {...params, startDate: startDate ? startDate.toISOString() : null}
@@ -169,15 +167,24 @@ const getParams = ({
 
 export const mutateOng = async (props) => {
   const params = getParams(props)
-  console.log('mutateOng', params)
   const data = await mutateData(params, '/Ong', 'PUT');
   return data
 }
 
 export const mutateEvent = async (props) => {
   const params = getParams(props)
-  console.log('mutateEvent', params)
   const data = await mutateData(params, '/Event', 'PUT');
+  return data
+}
+
+export const mutateHomeless = async (props) => {
+  const params = getParams(props)
+  const data = await mutateData(params, '/Homeless', 'PUT');
+  return data
+}
+
+export const mutatePayment = async (params) => {
+  const data = await mutateData(params, '/Payment');
   return data
 }
 

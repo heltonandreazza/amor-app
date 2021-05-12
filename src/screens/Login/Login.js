@@ -9,11 +9,12 @@ import i18n from 'i18n-js'
 import get from 'lodash/get'
 import React, { useContext, useState } from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
-import { fetchMe, signIn, signUp } from 'services/client'
+import { fetchOng, fetchMe, signIn, signUp } from 'services/client'
 import { APP_ROUTES, FEEDBACK } from 'services/constants'
 import { AlertStoreContext, AppStoreContext } from 'services/stores'
 import { COLORS } from 'services/style'
 import backgroundImage from '../../../assets/images/splash.png'
+import { USER_PROFILE } from '../../services/constants'
 
 const styles = StyleSheet.create({
   row: {
@@ -152,9 +153,12 @@ const Login = ({ navigation }) => {
 
         try {
           const userData = await fetchMe()
-          if (userData.email) {
-            await appStore?.user?.setInfo(userData)
+          await appStore?.user?.setInfo(userData)
+          if(userData.profile == USER_PROFILE.ONG) {
+            const ongData = await fetchOng()
+            appStore.user.setInfo(ongData)
           }
+
           navigation.navigate(APP_ROUTES.Main)
         } catch (err) {
           console.log(err)
@@ -173,7 +177,7 @@ const Login = ({ navigation }) => {
       setIsLoading(true)
       try {
         const response = await signIn({ email, password })
-        loginUser(response, email, password)
+        await loginUser(response, email, password)
       } catch (e) {
         console.log(`login: ${e}`)
       }
@@ -211,6 +215,7 @@ const Login = ({ navigation }) => {
         }
         const response = await signUp(params)
         createAccount(response)
+        setIsCreateAccount(false)
       } catch(err) {
         console.log(err)
         alertStore.setAlert({

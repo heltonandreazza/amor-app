@@ -12,7 +12,6 @@ const CommentInput = ({ onChangeText, ...otherProps }) => {
       <Input
         multiline
         {...otherProps}
-        inputStyle={styles.input}
         containerStyle={styles.container}
         maxLength={otherProps.maxLength}
         onChangeText={value => {
