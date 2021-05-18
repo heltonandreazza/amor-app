@@ -36,6 +36,7 @@ const ProfilePerson = ({ navigation }) => {
   const [needs, setNeeds] = useState(profile?.needs)
   const [mainPhoto, setMainPhoto] = useState(profile?.photos?.length ? profile?.photos[0] : null)
   const [selectedAddress, setSelectedAddress] = useState(profile?.address || {})
+  const [counterNotFound, setCounterNotFound] = useState(profile?.counterNotFound || 0)
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,6 +62,7 @@ const ProfilePerson = ({ navigation }) => {
         needs: needs,
         photos: [mainPhoto],
         address: selectedAddress,
+        counterNotFound: counterNotFound + 1,
       }
       const response = await mutateHomeless(params)
       
@@ -87,6 +89,12 @@ const ProfilePerson = ({ navigation }) => {
     }
   }
 
+  const getStatus = (counter) => {
+    let desc = 'Está por aí'
+    if(counter > 3) desc = 'Nem sempre aparece'
+    if(counter > 6) desc = 'Difícil de encontrar'
+    return desc
+  }
   const addressDesc = getAddressInputTextValue(selectedAddress)
 
   return useObserver(() => (
@@ -99,6 +107,10 @@ const ProfilePerson = ({ navigation }) => {
             description={(
               <View>
                 <Text bold>{`${name}\n`}</Text>
+                <Text bold style={{ fontSize: 12, color: counterNotFound > 3 ? COLORS.DANGER : COLORS.SUCCESS }}>
+                  <Icon icon={counterNotFound > 3 ? 'thumb-down' : 'thumb-up'} size={10} style={{ color: counterNotFound > 3 ? COLORS.DANGER : COLORS.SUCCESS }}/>
+                  {getStatus(counterNotFound)}
+                </Text>
                 <Text style={{ fontSize: 10 }}>
                   <Icon icon={'map-marker'} size={10} style={{ color: COLORS.DANGER }}/>
                   {addressDesc}
@@ -206,7 +218,7 @@ const ProfilePerson = ({ navigation }) => {
         {mode === MODE.VIEW ?
           <>
             <View>
-              <Button title="Buscar ONGs/Eventos" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Home })}/>
+              <Button title="Não encontrei o morador" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={submit}/>
             </View>
             <View>
               <Button title="Doar pessoalmente" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => openLink(encodeURI(`https://maps.google.com/maps?daddr=${getMapsAddress(selectedAddress)}`))}/>

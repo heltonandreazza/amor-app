@@ -4,7 +4,7 @@
     "slug": "amor-app",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -23,7 +23,7 @@
     "android": {
       "package": "com.amorco.amorapp",
       "permissions": ["WAKE_LOCK", "LOCATION"],
-      "versionCode": 100000
+      "versionCode": 100001
     }
   }
 }

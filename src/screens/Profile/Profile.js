@@ -28,8 +28,8 @@ const Profile = ({ navigation }) => {
   const appStore = useContext(AppStoreContext)
   const user = appStore?.user ?? {}
 
-  const logout = () => {
-    appStore.logout()
+  const logout = async () => {
+    await appStore.logout()
     navigation.navigate(APP_ROUTES.Auth)
   }
 
@@ -45,6 +45,7 @@ const Profile = ({ navigation }) => {
       setOngData(ongData)
     } catch (err) {
       console.log(err)
+      setIsLoading(false)
     } finally {
       setIsLoading(false)
     }
@@ -87,6 +88,7 @@ const Profile = ({ navigation }) => {
         {
           SHOW_FIELDS.map(field => {
             const value = user[field.key]
+            if(!value) return null
             return (
               <View>
                 <IconCard height={null} hideIconSpacer>

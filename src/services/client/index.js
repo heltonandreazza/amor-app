@@ -51,7 +51,7 @@ export const fetchData = async (path = '', params = {}, url = API_URL) => {
   return await makeHttpCall(httpCall)
 }
 
-const loginUser = async (response) => {
+const login = async (response) => {
   if (response?.status > 400) {
     console.log('Error login user ', response.title)
     alertStore.setAlert({
@@ -96,7 +96,7 @@ const makeHttpCall = async httpCall => {
         console.log('responseRefreshToken2', r)
         responseRefreshToken = await r.json()
         console.log('responseRefreshToken3', responseRefreshToken)
-        await loginUser(responseRefreshToken)
+        await login(responseRefreshToken)
       } catch (e) {
         console.log(`makeHttpCall: ${e}`)
         appStore.logout()
@@ -179,12 +179,22 @@ export const mutateEvent = async (props) => {
 
 export const mutateHomeless = async (props) => {
   const params = getParams(props)
-  const data = await mutateData(params, '/Homeless', 'PUT');
+  const data = await mutateData({...params, counterNotFound: props?.counterNotFound}, '/Homeless', 'PUT');
+  return data
+}
+
+export const mutateEventParticipants = async (params) => {
+  const data = await mutateData(params, '/EventParticipants');
   return data
 }
 
 export const mutatePayment = async (params) => {
   const data = await mutateData(params, '/Payment');
+  return data
+}
+
+export const searchOnMyLocation = async (params) => {
+  const data = await mutateData(params, '/Search');
   return data
 }
 

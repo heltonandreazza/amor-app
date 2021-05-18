@@ -156,7 +156,7 @@ const Login = ({ navigation }) => {
           await appStore?.user?.setInfo(userData)
           if(userData.profile == USER_PROFILE.ONG) {
             const ongData = await fetchOng()
-            appStore.user.setInfo(ongData)
+            await appStore.user.setInfo(ongData)
           }
 
           navigation.navigate(APP_ROUTES.Main)

@@ -11,7 +11,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { useObserver } from 'mobx-react-lite'
 import React, { useContext, useState } from 'react'
 import { Image, ImageBackground, ScrollView, View } from 'react-native'
-import { fetchOng, mutateEvent, mutateOng } from 'services/client'
+import { fetchOng, mutateEvent, mutateOng, mutateEventParticipants } from 'services/client'
 import { APP_ROUTES, FEEDBACK, MODE, USER_PROFILE } from 'services/constants'
 import { AlertStoreContext, AppStoreContext } from 'services/stores'
 import { COLORS, ICON_SIZE } from 'services/style'
@@ -46,13 +46,14 @@ const ProfileOng = ({ navigation }) => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false)
   // inputs both
   const [name, setName] = useState(profile?.name)
-  const [phone, setPhone] = useState(profile?.phone)
+  // const [phone, setPhone] = useState(profile?.phone)
   const [document, setDocument] = useState(profile?.document)
   const [photos, setPhotos] = useState(profile?.photos ?? [])
   const [supporters, setSupporters] = useState(profile?.supporters)
+  console.log('supporters', supporters)
   const [mainPhoto, setMainPhoto] = useState(photos?.length ? photos[0] : null)
   const [about, setAbout] = useState(profile?.about)
-  const [selectedAddress, setSelectedAddress] = useState(profileType == USER_PROFILE.EVENT ? (profile?.eventAddress || {}) : (profile?.address || {}))
+  const [selectedAddress, setSelectedAddress] = useState(profile?.address || {})
   // inputs ong
   const [openingTime, setOpeningTime] = useState(profile?.openingTime)
   const [closingTime, setClosingTime] = useState(profile?.closingTime)
@@ -128,12 +129,33 @@ const ProfileOng = ({ navigation }) => {
     }
   }
 
+  async function submitParticipate() {
+    try {
+      setIsLoading(true)
+      const response = await mutateEventParticipants({ eventId: profile?.id  })
+      alertStore.setAlert({
+        type: FEEDBACK.SUCCESS,
+        message: 'Parabens por participar!',
+      })
+      console.log('response', response)
+    } catch(e) {
+      console.log(e)
+      alertStore.setAlert({
+        type: FEEDBACK.DANGER,
+        message: 'Algo deu errado',
+      })
+      setIsLoading(false)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   async function submit() {
     try {
       setIsLoading(true)
       let params = { 
         id: profile?.id,
-        phone: phone,
+        // phone: phone,
         name: name,
         document: document,
         about: about,
@@ -267,7 +289,7 @@ const ProfileOng = ({ navigation }) => {
                 </IconCard>
                 {supporters ? 
                   <>
-                    {supporters?.map(supporter => <IconCard iconName="account-heart" description={supporter.name}/>)}
+                    {supporters?.map(supporter => <IconCard iconName="account-heart" description={supporter}/>)}
                   </>
                   : null
                 }
@@ -282,9 +304,9 @@ const ProfileOng = ({ navigation }) => {
                       <Text bold>{name}</Text>
                     </View>
                   </IconCard>
-                  { profileType == USER_PROFILE.ONG && <IconCard iconName="phone" description={phone}/>}
+                  {/* { profileType == USER_PROFILE.ONG ? <IconCard iconName="phone" description={phone}/> : null} */}
                   <IconCard iconName="heart" description={about}/>
-                  { profileType == USER_PROFILE.EVENT && <IconCard iconName="earth" description={pageProfileLink}/>}
+                  { profileType == USER_PROFILE.EVENT && pageProfileLink ? <IconCard iconName="earth" description={pageProfileLink}/> : null}
                   { profileType == USER_PROFILE.ONG && <IconCard iconName="clock" description={`${openingTime} - ${closingTime}`}/>}
                   { profileType == USER_PROFILE.EVENT && <IconCard iconName="clock" description={`${startDate ? startDate.toLocaleString() : ''} - ${endDate ? endDate.toLocaleString() : ''}`}/>}
                 </View> : null
@@ -306,7 +328,7 @@ const ProfileOng = ({ navigation }) => {
                       onChangeText={value => setAbout(value)}
                     />
                   </View>
-                  <View style={styles.inputWrapper}>
+                  {/* <View style={styles.inputWrapper}>
                     { profileType == USER_PROFILE.ONG && 
                       <Input
                         label={'Phone'}
@@ -314,7 +336,7 @@ const ProfileOng = ({ navigation }) => {
                         onChangeText={value => setPhone(value)}
                       />
                     }
-                  </View>
+                  </View> */}
                   <View style={styles.inputWrapper}>
                     <Input
                       label={'link página do evento'}
@@ -404,7 +426,7 @@ const ProfileOng = ({ navigation }) => {
                       <Text bold>{name}</Text>
                     </View>
                   </IconCard>
-                  <IconCard iconName="phone" description={phone}/>
+                  {/* <IconCard iconName="phone" description={phone}/> */}
                   <IconCard iconName="heart" description={about}/>
                   <IconCard iconName="clock" description={`${openingTime} - ${closingTime}`}/>
                 </View> : null
@@ -426,7 +448,8 @@ const ProfileOng = ({ navigation }) => {
         {mode === MODE.VIEW ?
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Button title="Doar pessoalmente" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => openLink(encodeURI(`https://maps.google.com/maps?daddr=${getMapsAddress(selectedAddress)}`))}/>
-            <Button title="Doar online" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Payment, params: { ongId: profileType == USER_PROFILE.EVENT ? profile?.ongId : profile?.id } })}/>
+            {profileType === USER_PROFILE.ONG && <Button title="Doar online" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => navigation.navigate({ routeName: APP_ROUTES.Payment, params: { ongId: profileType == USER_PROFILE.EVENT ? profile?.ongId : profile?.id } })}/>}
+            {profileType == USER_PROFILE.EVENT ? <Button title="Participar" style={{ marginTop: 8, marginHorizontal: 8 }} onPress={() => submitParticipate()}/> : null}
           </View>
         : null}
         {mode === MODE.EDIT ?

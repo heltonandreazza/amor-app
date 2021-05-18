@@ -35,6 +35,7 @@ export const USER_PROFILE = {
   HOMELESS: 'HOMELESS',
   ONG: 'ONG',
   EVENT: 'EVENT',
+  VOLUNTARY: 'VOLUNTARY',
 }
 
 export const MODE = {
